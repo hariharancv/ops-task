@@ -1,0 +1,28 @@
+version: '3.0'
+services:
+  redis:
+    image: redis:alpine3.18
+    container_name: redis
+  
+  app:
+    image: ops-task
+    container_name: app
+    environment:
+      DEMO_APP_ADDR: ":${DEMO_APP_ADDR}"
+      DEMO_REDIS_ADDR: ${DEMO_REDIS_ADDR}
+    depends_on:
+      - redis
+
+  nginx:
+    image: nginx:stable
+    container_name: nginx
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+    environment:
+      NGINX_HOST: ${NGINX_HOST}
+      NGINX_PORT: ${NGINX_PORT}
+      DEMO_APP_ADDR: ${DEMO_APP_ADDR}
+    ports:
+      - ${HOST_PORT}:${NGINX_PORT}
+    depends_on:
+      - app
