@@ -62,5 +62,10 @@
   loop: "{{ ufw_firewall_ports }}"
   when: item.port != ''
 
-
+- name: Sysctl configuration
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ sysctl_configuration }}"
 
