@@ -23,7 +23,9 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   # NOTE: This will enable public access to the opened port
-  # config.vm.network "forwarded_port", guest: 80, host: 8080
+  guest_port = ENV["DOCKER_HOST_PORT"].to_i
+  local_port = ENV["LOCAL_PORT"].to_i
+  config.vm.network "forwarded_port", guest: guest_port, host: local_port
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
@@ -32,7 +34,8 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  nginx_host = ENV["NGINX_HOST"]
+  config.vm.network "private_network", ip: nginx_host
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on

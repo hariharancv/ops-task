@@ -23,9 +23,14 @@
     tag: "{{ app_image_tag }}"
     source: build
 
-- name: Restart docker-compose
+- name: Stop docker-compose
+  community.docker.docker_compose:
+    project_src: "{{ app_working_dir }}"
+    state: absent
+  become_user: "{{ app_owner }}"
+
+- name: Start docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"
     state: present
-    restarted: true
   become_user: "{{ app_owner }}"
