@@ -23,7 +23,7 @@
       regexp: "^ClientAliveInterval"
     - line: "ClientAliveCountMax 3"
       regexp: "^ClientAliveCountMax"
-  notify: Restart sshd
+  notify: Restart ssh
 
 - name: Install fail2ban
   ansible.builtin.apt:

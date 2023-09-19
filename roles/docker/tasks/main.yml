@@ -24,6 +24,12 @@
   loop: "{{ docker_packages }}"
   when: ansible_os_family == "Debian"
 
+- name: Modify docker daemon
+  ansible.builtin.template:
+    src: daemon.json.j2
+    dest: /etc/docker
+  notify: Restart dockerd
+  
 - name: Enable and start docker
   ansible.builtin.systemd:
     name: docker

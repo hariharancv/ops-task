@@ -15,3 +15,5 @@ default_groups:
   - ssh
   - docker
   - sudo
+
+timezone: Asia/Kolkata

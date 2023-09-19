@@ -5,10 +5,7 @@ services:
     container_name: redis
   
   app:
-    build:
-      args:
-        BIN: ${BIN}
-        VERSION: ${VERSION}
+    image: ${IMAGE_NAME}:${IMAGE_TAG}
     container_name: app
     environment:
       DEMO_APP_ADDR: ":${DEMO_APP_ADDR}"

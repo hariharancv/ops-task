@@ -41,3 +41,7 @@
   ansible.builtin.lineinfile:
     path: /etc/hosts
     line: 127.0.0.1 {{ hostname }}
+
+- name: Update timezone
+  community.general.timezone:
+    name: "{{ timezone }}"

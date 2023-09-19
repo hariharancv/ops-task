@@ -1,0 +1,31 @@
+- name: Create working directory
+  ansible.builtin.file:
+    path: "{{ app_working_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ app_owner }}"
+    group: "{{ app_owner }}"
+
+- name: Copy files to server
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ app_working_dir }}"
+  loop: "{{ app_files_to_copy }}"
+
+- name: Build docker image
+  community.docker.docker_image:
+    build:
+      args:
+        BIN: "{{ app_bin }}"
+        VERSION: "{{ app_version }}"
+      path: "{{ app_files_dir }}"
+    name: "{{ app_image_name }}"
+    tag: "{{ app_image_tag }}"
+    source: build
+
+- name: Restart docker-compose
+  community.docker.docker_compose:
+    project_src: "{{ app_working_dir }}"
+    state: present
+    restarted: true
+  become_user: "{{ app_owner }}"

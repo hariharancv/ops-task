@@ -14,3 +14,7 @@ docker_packages:
   - containerd.io
   - docker-buildx-plugin
   - docker-compose-plugin
+  - docker-compose
+
+docker_log_max_size: 10m
+docker_log_max_files: 10

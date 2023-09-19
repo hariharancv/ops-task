@@ -1,7 +1,11 @@
 - hosts: all
   become: true
+  vars:
+    default_user: demo
   roles:
     - role: common
+      vars:
+        username: "{{ default_user }}"
     - role: security
       vars:
         firewall_ports:
@@ -9,5 +13,10 @@
             protocol: tcp
             rule: allow
     - role: docker
+    - role: app
+      vars:
+        app_owner: "{{ default_user }}"
+        app_image_name: "{{ lookup('env', 'IMAGE_NAME') }}"
+        app_image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
 
           
