@@ -23,6 +23,27 @@
     tag: "{{ app_image_tag }}"
     source: build
 
+- name: Generate CSR
+  ansible.builtin.command: openssl req -new -subj "/C=IN/ST=Delhi/CN=localhost" -newkey rsa:4096 -nodes -keyout server.key -out server.csr
+  args:
+    chdir: "{{ app_working_dir }}"
+    creates: server.csr
+  when: app_use_ssl
+  become_user: "{{ app_owner }}"
+
+- name: Generate ssl certificates
+  ansible.builtin.command: openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt
+  args:
+    chdir: "{{ app_working_dir }}"
+    creates: server.crt
+  when: app_use_ssl
+  become_user: "{{ app_owner }}"
+
+- name: Copy NGINX config
+  ansible.builtin.template:
+    src: nginx.conf.template.j2
+    dest: "{{ app_working_dir }}/nginx.conf.template"
+
 - name: Stop docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"

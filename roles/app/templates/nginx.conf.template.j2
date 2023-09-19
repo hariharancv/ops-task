@@ -1,6 +1,10 @@
 server {
-    listen      ${NGINX_PORT};
+    listen      ${NGINX_PORT} {% if app_use_ssl %} ssl {% endif %};
     server_name  ${NGINX_HOST};
+    {% if app_use_ssl -%}
+    ssl_certificate /etc/nginx/certs/server.crt;
+    ssl_certificate_key /etc/nginx/certs/server.key;
+    {% endif %}
 
     location / {
         resolver 127.0.0.11;

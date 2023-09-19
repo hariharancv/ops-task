@@ -18,6 +18,8 @@ services:
     container_name: nginx
     volumes:
       - ./nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./server.crt:/etc/nginx/certs/server.crt
+      - ./server.key:/etc/nginx/certs/server.key
     environment:
       NGINX_HOST: ${NGINX_HOST}
       NGINX_PORT: ${NGINX_PORT}

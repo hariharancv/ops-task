@@ -8,7 +8,8 @@ app_files_dir: /vagrant
 
 app_owner: demo
 
+app_use_ssl: true
+
 app_files_to_copy:
   - docker-compose.yml
-  - nginx.conf.template
   - .env
