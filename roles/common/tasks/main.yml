@@ -12,6 +12,7 @@
   ansible.builtin.apt:
     name: "{{ item }}"
   loop: "{{ default_packages }}"
+  when: ansible_os_family == "Debian"
 
 - name: Create default groups
   ansible.builtin.group:

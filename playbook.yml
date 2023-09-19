@@ -8,5 +8,6 @@
           - port: "{{ lookup('env', 'DOCKER_HOST_PORT') }}"
             protocol: tcp
             rule: allow
+    - role: docker
 
           
