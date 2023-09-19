@@ -3,3 +3,10 @@
   roles:
     - role: common
     - role: security
+      vars:
+        firewall_ports:
+          - port: "{{ lookup('env', 'DOCKER_HOST_PORT') }}"
+            protocol: tcp
+            rule: allow
+
+          

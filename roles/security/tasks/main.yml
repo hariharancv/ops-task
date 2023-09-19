@@ -37,3 +37,30 @@
     mode: 0600
   notify: Restart fail2ban
 
+- name: Disable root account
+  ansible.builtin.user:
+    name: root
+    password: '!'
+
+- name: Allow outgoing connections
+  community.general.ufw:
+    state: enabled
+    direction: outgoing
+    policy: allow
+
+- name: Deny incoming connections
+  community.general.ufw:
+    state: enabled
+    direction: incoming
+    policy: deny
+
+- name: Allow ports
+  community.general.ufw:
+    rule: "{{ item.rule }}"
+    proto: "{{ item.protocol }}"
+    port: "{{ item.port }}"
+  loop: "{{ ufw_firewall_ports }}"
+  when: item.port != ''
+
+
+

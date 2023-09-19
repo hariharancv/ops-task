@@ -3,3 +3,22 @@ ssh_port: 22
 
 fail2ban_package: fail2ban
 fail2ban_jail_config_dir: /etc/fail2ban
+
+default_firewall_ports:
+  - port: 80
+    protocol: tcp
+    rule: allow
+  - port: 443
+    protocol: tcp
+    rule: allow
+  - port: "{{ ssh_port }}"
+    protocol: tcp
+    rule: allow
+
+firewall_ports: []
+
+ufw_firewall_ports: "{{ default_firewall_ports + firewall_ports }}"
+
+sysctl_values:
+  - key: 
+    value: 
