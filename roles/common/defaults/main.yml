@@ -1,0 +1,16 @@
+hostname: demo-ops
+
+username: demo
+home_dir: /home/{{ username }}
+user_password: changeme
+
+default_packages:
+  - ufw
+  - openssl
+  - git
+  - vim
+
+default_groups:
+  - "{{ username }}"
+  - ssh
+  - docker

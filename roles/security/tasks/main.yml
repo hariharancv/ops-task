@@ -1,0 +1,39 @@
+- name: Secure SSH
+  ansible.builtin.lineinfile:
+    dest: "{{ sshd_config_file }}"
+    line: "{{ item.line }}"
+    state: present
+    regexp: "{{ item.regexp }}"
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  with_items: 
+    - line: "PasswordAuthentication no"
+      regexp: "^PasswordAuthentication"
+    - line: "PermitRootLogin no"
+      regexp: "^PermitRootLogin"
+    - line: "Port {{ ssh_port }}"
+      regexp: "^Port"
+    - line: "PermitEmptyPasswords no"
+      regexp: "^PermitEmptyPasswords"
+    - line: "X11Forwarding no"
+      regexp: "^X11Forwarding"
+    - line: "Protocol 2"
+      regexp: "^Protocol"
+    - line: "ClientAliveInterval 300"
+      regexp: "^ClientAliveInterval"
+    - line: "ClientAliveCountMax 3"
+      regexp: "^ClientAliveCountMax"
+  notify: Restart sshd
+
+- name: Install fail2ban
+  ansible.builtin.apt:
+    name: "{{ fail2ban_package }}"
+    state: present
+
+- name: Create jail.local
+  ansible.builtin.template:
+    src: jail.local.j2
+    dest: "{{ fail2ban_jail_config_dir }}"
+    mode: 0600
+  notify: Restart fail2ban
+
