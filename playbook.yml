@@ -18,5 +18,6 @@
         app_owner: "{{ default_user }}"
         app_image_name: "{{ lookup('env', 'IMAGE_NAME') }}"
         app_image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
+        app_use_ssl: false
 
           
