@@ -5,7 +5,10 @@ services:
     container_name: redis
   
   app:
-    image: ops-task
+    build:
+      args:
+        BIN: ${BIN}
+        VERSION: ${VERSION}
     container_name: app
     environment:
       DEMO_APP_ADDR: ":${DEMO_APP_ADDR}"
@@ -23,6 +26,6 @@ services:
       NGINX_PORT: ${NGINX_PORT}
       DEMO_APP_ADDR: ${DEMO_APP_ADDR}
     ports:
-      - ${HOST_PORT}:${NGINX_PORT}
+      - ${DOCKER_HOST_PORT}:${NGINX_PORT}
     depends_on:
       - app
