@@ -9,4 +9,3 @@
     name: ssh
     enabled: true
     state: restarted
-  become_user: "{{ regular_user }}"

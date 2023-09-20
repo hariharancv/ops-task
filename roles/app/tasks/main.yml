@@ -6,13 +6,20 @@
     owner: "{{ app_owner }}"
     group: "{{ app_owner }}"
 
-# - name: Copy files to server
-#   ansible.builtin.copy:
-#     src: "{{ item }}"
-#     dest: "{{ app_working_dir }}"
-#   loop: "{{ app_files_to_copy }}"
+- name: Copy files to server
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ app_working_dir }}"
+  loop: "{{ app_files_to_copy }}"
+
+- name: Get UID of the app owner
+  ansible.builtin.command: id -u
+  register: app_owner_id
+  become_user: "{{ app_owner }}"
 
 - name: Copy docker-compose file
+  vars:
+    docker_uid: "{{ app_owner_id.stdout }}"
   ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ app_working_dir }}/docker-compose.yml"
@@ -64,19 +71,12 @@
   become_user: "{{ app_owner }}"
   when: app_env == 'docker'
 
-- name: Get UID of the app owner
-  ansible.builtin.command: id -u
-  register: app_owner_id
-  become_user: "{{ app_owner }}"
-
 - name: Start docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"
     state: present
   become_user: "{{ app_owner }}"
   when: app_env == 'docker'
-  environment: 
-    DOCKER_UID: "{{ app_owner_id.stdout }}"
 
 - name: Copy k3s deployment file
   ansible.builtin.template:

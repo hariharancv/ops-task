@@ -20,11 +20,14 @@ services:
 
   grafana:
     image: "{{ app_grafana_image }}:{{ app_grafana_tag }}"
-    user: ${DOCKER_UID}
+    user: "{{ docker_uid }}"
     ports:
       - "{{ app_grafana_host_port }}:3000"
     volumes:
       - ./grafana_data:/var/lib/grafana
+      - ./grafana.json:/etc/grafana/provisioning/dashboards/app_dashboard.json
+      - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
 
   app:
     image: "{{ app_image_name }}:{{ app_image_tag }}"

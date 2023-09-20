@@ -13,10 +13,10 @@ app_owner: demo
 
 app_use_ssl: true
 
-# app_files_to_copy:
-#   - prometheus.yml
-#   # - docker-compose.yml
-#   # - .env
+app_files_to_copy:
+  - grafana.json
+  - datasource.yml
+  - dashboard.yml
 
 app_env: docker
 
