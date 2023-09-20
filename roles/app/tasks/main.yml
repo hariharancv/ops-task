@@ -47,7 +47,7 @@
   args:
     chdir: "{{ app_working_dir }}"
     creates: server.csr
-  when: app_use_ssl and app_env == 'docker'
+  when: app_use_ssl and app_env == "docker"
   become_user: "{{ app_owner }}"
 
 - name: Generate ssl certificates
@@ -55,13 +55,13 @@
   args:
     chdir: "{{ app_working_dir }}"
     creates: server.crt
-  when: app_use_ssl and app_env == 'docker'
+  when: app_use_ssl and app_env == "docker"
   become_user: "{{ app_owner }}"
 
 - name: Copy NGINX config
   ansible.builtin.template:
-    src: nginx.conf.template.j2
-    dest: "{{ app_working_dir }}/nginx.conf.template"
+    src: nginx.conf.j2
+    dest: "{{ app_working_dir }}/nginx.conf"
   when: app_env == 'docker'
 
 - name: Stop docker-compose

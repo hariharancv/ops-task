@@ -1,0 +1,27 @@
+events {
+    worker_connections 1024;
+}
+
+http {
+    server {
+        listen 80;
+        {% if app_use_ssl %}
+        listen      443 ssl;
+        {% endif %}
+        server_name  {{ app_nginx_host }};
+        {% if app_use_ssl -%}
+        ssl_certificate /etc/nginx/certs/server.crt;
+        ssl_certificate_key /etc/nginx/certs/server.key;
+        if ($scheme != "https") { 
+            return 301 https://$host:8000$request_uri;
+        }
+        {% endif %}
+
+        location / {
+            resolver 127.0.0.11;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_pass  http://app:{{app_addr}};
+        }
+    }
+}

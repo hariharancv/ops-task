@@ -3,7 +3,6 @@ app_version: 1.0.0
 app_addr: 8005
 app_redis_addr: redis:6379
 app_nginx_host: localhost
-app_nginx_port: 443
 
 
 app_working_dir: /etc/demo-ops
@@ -11,7 +10,7 @@ app_files_dir: /vagrant
 
 app_owner: demo
 
-app_use_ssl: true
+app_use_ssl: false
 
 app_files_to_copy:
   - grafana.json
