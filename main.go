@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/gomodule/redigo/redis"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
@@ -59,6 +60,9 @@ func main() {
 		}
 		w.Write([]byte(fmt.Sprintf("welcome to api. key count is: %d", val)))
 	})
+
+	// Prometheus
+	r.Handle("/metrics", promhttp.Handler())
 	addr := os.Getenv("DEMO_APP_ADDR")
 	if addr == "" {
 		addr = ":8080"

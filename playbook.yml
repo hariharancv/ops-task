@@ -14,6 +14,12 @@
           - port: "{{ lookup('env', 'DOCKER_HOST_PORT') if lookup('env', 'APP_ENV') == 'docker' else lookup('env', 'APP_NODEPORT') }}"
             protocol: tcp
             rule: allow
+          - port: "3000" # Grafana
+            protocol: tcp
+            rule: allow
+          - port: "9090" # Prometheus
+            protocol: tcp
+            rule: allow
       
     - role: docker
 
@@ -25,11 +31,9 @@
     - role: app
       vars:
         app_owner: "{{ default_user }}"
-        app_image_name: "{{ lookup('env', 'IMAGE_NAME') }}"
-        app_image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
         app_use_ssl: false
         app_env: "{{ lookup('env', 'APP_ENV') }}"
-        app_addr: "{{ lookup('env', 'DEMO_APP_ADDR') }}"
         app_nodeport: "{{ lookup('env', 'APP_NODEPORT') }}"
+        app_nginx_host_port: "{{ lookup('env', 'DOCKER_HOST_PORT') }}"
 
           

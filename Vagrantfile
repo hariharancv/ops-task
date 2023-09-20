@@ -29,6 +29,15 @@ Vagrant.configure("2") do |config|
     guest_port = ENV["APP_NODEPORT"].to_i
   end
   config.vm.network "forwarded_port", guest: guest_port, host: local_port
+
+  if ENV["APP_ENV"] == "docker" then
+    # Grafana
+    config.vm.network "forwarded_port", guest: 3000, host: 3000
+
+    # Prometheus
+    config.vm.network "forwarded_port", guest: 9090, host: 9090
+  end
+
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access

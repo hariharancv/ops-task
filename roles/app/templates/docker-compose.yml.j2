@@ -1,0 +1,52 @@
+version: '3.0'
+services:
+  redis:
+    image: "{{ app_redis_image }}:{{ app_redis_tag }}"
+    container_name: redis
+
+  redis-exporter:
+    image: "{{ app_redis_exporter_image }}:{{ app_redis_exporter_tag }}"
+    environment:
+      REDIS_ADDR: "{{ app_redis_addr }}"
+    depends_on:
+      - redis
+
+  prometheus:
+    image: "{{ app_prometheus_image }}:{{ app_prometheus_tag }}"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "{{ app_prometheus_host_port }}:9090"
+
+  grafana:
+    image: "{{ app_grafana_image }}:{{ app_grafana_tag }}"
+    user: ${DOCKER_UID}
+    ports:
+      - "{{ app_grafana_host_port }}:3000"
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+
+  app:
+    image: "{{ app_image_name }}:{{ app_image_tag }}"
+    container_name: app
+    environment:
+      DEMO_APP_ADDR: ":{{ app_addr }}"
+      DEMO_REDIS_ADDR: "{{ app_redis_addr }}"
+    depends_on:
+      - redis
+
+  nginx:
+    image: "{{ app_nginx_image }}:{{ app_nginx_tag }}"
+    container_name: nginx
+    volumes:
+      - ./nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./server.crt:/etc/nginx/certs/server.crt
+      - ./server.key:/etc/nginx/certs/server.key
+    environment:
+      NGINX_HOST: {{ app_nginx_host }}
+      NGINX_PORT: {{ app_nginx_port }}
+      DEMO_APP_ADDR: {{ app_addr }}
+    ports:
+      - "{{ app_nginx_host_port }}:{{ app_nginx_port }}"
+    depends_on:
+      - app

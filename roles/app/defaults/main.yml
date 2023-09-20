@@ -1,7 +1,10 @@
-app_image_name: ops-task
-app_image_tag: latest
 app_bin: demo.bin
 app_version: 1.0.0
+app_addr: 8005
+app_redis_addr: redis:6379
+app_nginx_host: localhost
+app_nginx_port: 443
+
 
 app_working_dir: /etc/demo-ops
 app_files_dir: /vagrant
@@ -10,16 +13,34 @@ app_owner: demo
 
 app_use_ssl: true
 
-app_files_to_copy:
-  - docker-compose.yml
-  - .env
+# app_files_to_copy:
+#   - prometheus.yml
+#   # - docker-compose.yml
+#   # - .env
 
 app_env: docker
 
-# k3s
-app_addr: 8005
+# images
 app_redis_image: redis
 app_redis_tag: alpine3.18
+
+app_nginx_image: nginx
+app_nginx_tag: stable
+app_nginx_host_port: 8000 # ENV DOCKER_HOST_PORT
+
+app_redis_exporter_image: oliver006/redis_exporter
+app_redis_exporter_tag: alpine
+
+app_prometheus_image: prom/prometheus
+app_prometheus_tag: v2.47.0
+app_prometheus_host_port: 9090
+
+app_grafana_image: grafana/grafana
+app_grafana_tag: 10.1.2
+app_grafana_host_port: 3000
+app_image_name: ops-task
+app_image_tag: latest
+
 app_redis_svc: redis-svc
 app_redis_port: 6379
 app_nodeport: 30100

@@ -5,7 +5,7 @@
         update_cache: true
     - name: Upgrade (APT)
       ansible.builtin.apt:
-        upgrade: yes
+        upgrade: "{{ allow_upgrade }}"
   when: ansible_os_family == "Debian"
 
 - name: Install default dependencies

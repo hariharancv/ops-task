@@ -4,6 +4,8 @@ username: demo
 home_dir: /home/{{ username }}
 user_password: changeme
 
+allow_upgrade: false
+
 default_packages:
   - ufw
   - openssl
