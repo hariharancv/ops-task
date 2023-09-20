@@ -25,8 +25,10 @@ Vagrant.configure("2") do |config|
   # NOTE: This will enable public access to the opened port
   guest_port = ENV["DOCKER_HOST_PORT"].to_i
   local_port = ENV["LOCAL_PORT"].to_i
+  if ENV["APP_ENV"] == "k3s" then
+    guest_port = ENV["APP_NODEPORT"].to_i
+  end
   config.vm.network "forwarded_port", guest: guest_port, host: local_port
-
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
   # via 127.0.0.1 to disable public access
@@ -34,8 +36,8 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  nginx_host = ENV["NGINX_HOST"]
-  config.vm.network "private_network", ip: nginx_host
+  # nginx_host = ENV["NGINX_HOST"]
+  # config.vm.network "private_network", ip: nginx_host
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -64,8 +66,8 @@ Vagrant.configure("2") do |config|
     # vb.gui = true
   
     # Customize the amount of memory on the VM:
-    vb.memory = "4096"
-    vb.cpus = 4
+    vb.memory = ENV["VM_MEMORY"]
+    vb.cpus = ENV["VM_CPUS"].to_i
   end
   #
   # View the documentation for the provider you are using for more

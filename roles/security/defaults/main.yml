@@ -19,6 +19,8 @@ firewall_ports: []
 
 ufw_firewall_ports: "{{ default_firewall_ports + firewall_ports }}"
 
+regular_user: demo
+
 sysctl_default_config:
 
   # Disable TCP SYN to prevent SYN flood attacks

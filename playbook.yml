@@ -9,6 +9,7 @@
       
     - role: security
       vars:
+        regular_user: "{{ default_user }}"
         firewall_ports:
           - port: "{{ lookup('env', 'DOCKER_HOST_PORT') if lookup('env', 'APP_ENV') == 'docker' else lookup('env', 'APP_NODEPORT') }}"
             protocol: tcp

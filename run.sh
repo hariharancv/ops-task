@@ -30,13 +30,13 @@ fi
 ansible-galaxy install -r requirements.yml
 
 # Run vagrant
-if [[ ! $( vagrant status | grep "running") ]]; then
-    vagrant up
-fi
+vagrant halt
+vagrant up
 
 # Check if app is accessible, else rerun provisioning
 URL="http://$NGINX_HOST:$LOCAL_PORT"
 status_code=$(curl --write-out "%{http_code}\n" --silent --output /dev/null "$URL")
 if [[ $status_code -ne 200 && $( vagrant status | grep "running") ]]; then
+    echo "app is not accessible, re-running provision"
     vagrant provision
 fi
