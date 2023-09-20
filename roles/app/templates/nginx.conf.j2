@@ -13,7 +13,7 @@ http {
         ssl_certificate /etc/nginx/certs/server.crt;
         ssl_certificate_key /etc/nginx/certs/server.key;
         if ($scheme != "https") { 
-            return 301 https://$host:8000$request_uri;
+            return 301 https://$http_host$request_uri;
         }
         {% endif %}
 

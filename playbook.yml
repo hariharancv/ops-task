@@ -31,7 +31,7 @@
     - role: app
       vars:
         app_owner: "{{ default_user }}"
-        app_use_ssl: "{{ lookup('env', 'APP_USE_SSL') }}"
+        app_use_ssl: "{{ lookup('env', 'APP_USE_SSL')|bool }}"
         app_env: "{{ lookup('env', 'APP_ENV') }}"
         app_nodeport: "{{ lookup('env', 'APP_NODEPORT') }}"
         app_nginx_host_port: "{{ lookup('env', 'DOCKER_HOST_PORT') }}"
