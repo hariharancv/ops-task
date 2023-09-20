@@ -1,0 +1,40 @@
+- name: Download k3s
+  ansible.builtin.get_url:
+    url: "{{ k3s_release }}"
+    dest: "{{ k3s_location }}"
+    owner: "{{ k3s_owner }}"
+    mode: 0744
+    checksum: "{{ k3s_checksum }}"
+
+- name: Copy k3s service file
+  ansible.builtin.template:
+    src: "k3s.service.j2"
+    dest: "{{ system_dir }}/k3s.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install kubectl
+  ansible.builtin.get_url:
+    url: "{{ k3s_kubectl_release }}"
+    dest: "{{ k3s_kubectl_location }}"
+    owner: "{{ k3s_owner }}"
+    mode: 0744
+    checksum: "{{ k3s_kubectl_checksum }}"
+
+- name: Enable and start k3s
+  ansible.builtin.systemd:
+    name: k3s
+    enabled: true
+    state: started
+    daemon_reload: true
+
+- name: Wait for kubeconfig file
+  ansible.builtin.wait_for:
+    path: "{{ k3s_kubeconfig }}" 
+
+- name: Change ownership of kubeconfig
+  ansible.builtin.file:
+    path: "{{ k3s_kubeconfig }}"
+    owner: "{{ k3s_owner }}"
+    mode: '0600'

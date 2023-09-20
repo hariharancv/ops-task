@@ -1,0 +1,11 @@
+[Unit]
+Description=Lightweight Kubernetes
+Documentation=https://k3s.io
+After=network-online.target
+
+[Service]
+ExecStart={{k3s_location}} server --docker --data-dir={{ k3s_data_location }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

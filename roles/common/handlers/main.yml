@@ -1,2 +1,2 @@
----
-# handlers file for common
+- name: Reset SSH connection
+  ansible.builtin.meta: reset_connection

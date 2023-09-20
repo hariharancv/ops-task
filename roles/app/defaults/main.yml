@@ -13,3 +13,15 @@ app_use_ssl: true
 app_files_to_copy:
   - docker-compose.yml
   - .env
+
+app_env: docker
+
+# k3s
+app_addr: 8005
+app_redis_image: redis
+app_redis_tag: alpine3.18
+app_redis_svc: redis-svc
+app_redis_port: 6379
+app_nodeport: 30100
+app_namespace: demo
+app_image_pull_policy: Never

@@ -1,0 +1,87 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "{{ app_namespace }}"
+  labels:
+    name: "{{ app_namespace }}"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: "{{ app_namespace }}"
+spec:
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: "{{ app_redis_image }}:{{ app_redis_tag }}"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: {{ app_redis_port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "{{ app_image_name }}"
+  namespace: "{{ app_namespace }}"
+spec:
+  selector:
+    matchLabels:
+      app: "{{ app_image_name }}"
+  template:
+    metadata:
+      labels:
+        app: "{{ app_image_name }}"
+    spec:
+      containers:
+      - name: "{{ app_image_name }}"
+        imagePullPolicy: {{ app_image_pull_policy }}
+        image: "{{ app_image_name }}:{{ app_image_tag }}"
+        env:
+        - name: DEMO_APP_ADDR
+          value: ":{{ app_addr }}"
+        - name: DEMO_REDIS_ADDR
+          value: "{{ app_redis_svc }}:{{ app_redis_port }}"
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: {{ app_addr }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ app_redis_svc }}"
+  namespace: "{{ app_namespace }}"
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: {{ app_redis_port }}
+    targetPort: {{ app_redis_port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ app_image_name }}-svc"
+  namespace: "{{ app_namespace }}"
+spec:
+  selector:
+    app: "{{ app_image_name }}"
+  ports:
+  - port: {{ app_addr }}
+    targetPort: {{ app_addr }}
+    nodePort: {{ app_nodeport }}
+  type: NodePort

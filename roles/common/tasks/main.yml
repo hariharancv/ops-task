@@ -27,10 +27,8 @@
     password: "{{ user_password | password_hash('sha512') }}"
     append: true
     update_password: on_create
-    groups:
-      - docker
-      - ssh
-      - "{{ username }}"
+    groups: "{{ default_groups }}"
+  notify: Reset SSH connection
 
 - name: Update hostname
   ansible.builtin.hostname:

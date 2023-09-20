@@ -15,13 +15,18 @@ if [[ ! $(pip list | grep -F docker) ]]; then
     exit 1
 fi
 
-packages=("ansible" "ansible-playbook" "ansible-galaxy")
+packages=("ansible" "ansible-playbook" "ansible-galaxy" "vagrant" "curl")
+not_installed=false
 for pkg in ${packages[@]}; do
     if [[ ! $( which ${pkg} ) ]]; then
         echo "${pkg} is not installed"
-        exit 1
+        not_installed=true
     fi
 done
+if [[ $not_installed == true ]]; then
+    exit 1
+fi
+
 ansible-galaxy install -r requirements.yml
 
 # Run vagrant

@@ -28,7 +28,7 @@
   args:
     chdir: "{{ app_working_dir }}"
     creates: server.csr
-  when: app_use_ssl
+  when: app_use_ssl and app_env == 'docker'
   become_user: "{{ app_owner }}"
 
 - name: Generate ssl certificates
@@ -36,22 +36,38 @@
   args:
     chdir: "{{ app_working_dir }}"
     creates: server.crt
-  when: app_use_ssl
+  when: app_use_ssl and app_env == 'docker'
   become_user: "{{ app_owner }}"
 
 - name: Copy NGINX config
   ansible.builtin.template:
     src: nginx.conf.template.j2
     dest: "{{ app_working_dir }}/nginx.conf.template"
+  when: app_env == 'docker'
 
 - name: Stop docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"
     state: absent
   become_user: "{{ app_owner }}"
+  when: app_env == 'docker'
 
 - name: Start docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"
     state: present
+  become_user: "{{ app_owner }}"
+  when: app_env == 'docker'
+
+- name: Copy k3s deployment file
+  ansible.builtin.template:
+    src: k3s-deployment.yml.j2
+    dest: "{{ app_working_dir }}/k3s-deployment.yml"
+  when: app_env == 'k3s'
+
+- name: Deploy to k3s
+  ansible.builtin.command: kubectl --kubeconfig {{ k3s_kubeconfig }} apply -f k3s-deployment.yml
+  args:
+    chdir: "{{ app_working_dir }}"
+  when: app_env == 'k3s'
   become_user: "{{ app_owner }}"

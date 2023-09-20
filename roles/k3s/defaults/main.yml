@@ -1,0 +1,13 @@
+system_dir: /etc/systemd/system
+k3s_location: /usr/local/bin/k3s
+k3s_data_location: /var/lib/rancher/k3s
+k3s_kubeconfig: /etc/rancher/k3s/k3s.yaml
+
+k3s_release: https://github.com/k3s-io/k3s/releases/download/v1.27.3%2Bk3s1/k3s
+k3s_checksum: "sha256:ee130a125683a2e588a1f92c144b927a184c209adb59c0fdc6930822b07b4c90"
+
+k3s_owner: demo
+
+k3s_kubectl_release: https://dl.k8s.io/release/v1.28.1/bin/linux/amd64/kubectl
+k3s_kubectl_location: /usr/local/bin/kubectl
+k3s_kubectl_checksum: "sha256:e7a7d6f9d06fab38b4128785aa80f65c54f6675a0d2abef655259ddd852274e1"
