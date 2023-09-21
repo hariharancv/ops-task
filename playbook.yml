@@ -7,6 +7,7 @@
       vars:
         username: "{{ default_user }}"
       
+      # Additional sysctl values can be added by using the variable sysctl_config
     - role: security
       vars:
         regular_user: "{{ default_user }}"

@@ -36,7 +36,7 @@ vagrant up
 # Check if app is accessible, else rerun provisioning
 URL="http://localhost:$LOCAL_PORT"
 echo "trying to connect to the app..."
-status_code=$(curl -f --connect-timeout 5 --max-time 5 --retry 5 --retry-delay 0 --retry-max-time 30 --retry-connrefused --write-out "%{http_code}" --silent --output /dev/null "$URL")
+status_code=$(curl -f --connect-timeout 5 --max-time 5 --retry 5 --retry-delay 0 --retry-max-time 60 --retry-all-errors --write-out "%{http_code}" --silent --output /dev/null "$URL")
 if [[ $status_code -ne "200" && $( vagrant status | grep "running") ]]; then
     echo "app is not accessible, re-running provision"
     vagrant provision

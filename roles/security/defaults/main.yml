@@ -15,6 +15,7 @@ default_firewall_ports:
     protocol: tcp
     rule: allow
 
+# This variable can be set from playbook.yml to modify additional ports using UFW
 firewall_ports: []
 
 ufw_firewall_ports: "{{ default_firewall_ports + firewall_ports }}"
@@ -57,6 +58,7 @@ sysctl_default_config:
   - key: fs.file-max
     value: 65536
 
+# This variable can be set from playbook.yml to add additional sysctl values
 sysctl_config: []
 
 sysctl_configuration: "{{ sysctl_default_config + sysctl_config }}"

@@ -64,6 +64,17 @@
     dest: "{{ app_working_dir }}/nginx.conf"
   when: app_env == 'docker'
 
+- name: Create folders for prometheus and grafana
+  ansible.builtin.file:
+    path: "{{ app_working_dir }}/{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ app_owner }}"
+    group: "{{ app_owner }}"
+  loop:
+    - prometheus_data
+    - grafana_data
+
 - name: Stop docker-compose
   community.docker.docker_compose:
     project_src: "{{ app_working_dir }}"

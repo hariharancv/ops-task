@@ -1,11 +1,15 @@
+# Variables used when building the docker image as arguments
 app_bin: demo.bin
 app_version: 1.0.0
+
+# The port used by demo app inside the container
 app_addr: 8005
 app_redis_addr: redis:6379
 app_nginx_host: localhost
 
-
 app_working_dir: /etc/demo-ops
+
+# Used when building the app docker image
 app_files_dir: /vagrant
 
 app_owner: demo
@@ -17,6 +21,7 @@ app_files_to_copy:
   - datasource.yml
   - dashboard.yml
 
+# Can be either docker or k3s (to deploy to kubernetes)
 app_env: docker
 
 # images
@@ -25,6 +30,7 @@ app_redis_tag: alpine3.18
 
 app_nginx_image: nginx
 app_nginx_tag: stable
+# Exposed inside the VM
 app_nginx_host_port: 8000 # ENV DOCKER_HOST_PORT
 
 app_redis_exporter_image: oliver006/redis_exporter
@@ -32,16 +38,20 @@ app_redis_exporter_tag: alpine
 
 app_prometheus_image: prom/prometheus
 app_prometheus_tag: v2.47.0
+# Exposed inside the VM
 app_prometheus_host_port: 9090
 
 app_grafana_image: grafana/grafana
 app_grafana_tag: 10.1.2
+# Exposed inside the VM
 app_grafana_host_port: 3000
 app_image_name: ops-task
 app_image_tag: latest
 
 app_redis_svc: redis-svc
 app_redis_port: 6379
+
+# Used when app_env is set to k3s
 app_nodeport: 30100
 app_namespace: demo
 app_image_pull_policy: Never

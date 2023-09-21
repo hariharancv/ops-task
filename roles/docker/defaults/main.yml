@@ -16,5 +16,6 @@ docker_packages:
   - docker-compose-plugin
   - docker-compose
 
+# Used to modify the docker daemon
 docker_log_max_size: 10m
 docker_log_max_files: 10
