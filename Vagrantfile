@@ -32,10 +32,10 @@ Vagrant.configure("2") do |config|
 
   if ENV["APP_ENV"] == "docker" then
     # Grafana
-    config.vm.network "forwarded_port", guest: 3000, host: 3000
+    config.vm.network "forwarded_port", guest: 3000, host: ENV["GRAFANA_LOCAL_PORT"].to_i
 
     # Prometheus
-    config.vm.network "forwarded_port", guest: 9090, host: 9090
+    config.vm.network "forwarded_port", guest: 9090, host: ENV["PROMETHEUS_LOCAL_PORT"].to_i
   end
 
   # Create a forwarded port mapping which allows access to a specific port

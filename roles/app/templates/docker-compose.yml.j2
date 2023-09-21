@@ -3,6 +3,10 @@ services:
   redis:
     image: "{{ app_redis_image }}:{{ app_redis_tag }}"
     container_name: redis
+    volumes:
+      - ./redis_data:/data
+    networks:
+      - internal
 
   redis-exporter:
     image: "{{ app_redis_exporter_image }}:{{ app_redis_exporter_tag }}"
@@ -10,13 +14,20 @@ services:
       REDIS_ADDR: "{{ app_redis_addr }}"
     depends_on:
       - redis
+    networks:
+      - internal
 
   prometheus:
     image: "{{ app_prometheus_image }}:{{ app_prometheus_tag }}"
+    user: "{{ docker_uid }}"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/prometheus
     ports:
       - "{{ app_prometheus_host_port }}:9090"
+    networks:
+      - internal
+      - web
 
   grafana:
     image: "{{ app_grafana_image }}:{{ app_grafana_tag }}"
@@ -28,6 +39,8 @@ services:
       - ./grafana.json:/etc/grafana/provisioning/dashboards/app_dashboard.json
       - ./dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
+    networks:
+      - web
 
   app:
     image: "{{ app_image_name }}:{{ app_image_tag }}"
@@ -37,6 +50,8 @@ services:
       DEMO_REDIS_ADDR: "{{ app_redis_addr }}"
     depends_on:
       - redis
+    networks:
+      - internal
 
   nginx:
     image: "{{ app_nginx_image }}:{{ app_nginx_tag }}"
@@ -61,3 +76,10 @@ services:
 
     depends_on:
       - app
+    networks:
+      - internal
+      - web
+
+networks:
+  internal:
+  web:
