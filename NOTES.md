@@ -1,6 +1,8 @@
 ## Build Instructions
 The entire stack can be run by executing `run.sh`. There are some default environment variables defined in `.env` which will be used to configure different parameters.
 
+Use `./run.sh destroy` to destroy the VM.
+
 Using default values, the app can be reached at [http://localhost:8000](http://localhost:8000).
 
 Grafana should be available at [http://localhost:3000](http://localhost:3000). A new [dashboard](http://localhost:3000/d/xDLNRKUWz/app-dashboard?orgId=1&refresh=30s&from=now-5m&to=now) is automatically provisioned which can be found under the `General` folder. Default username and password is `admin`.
